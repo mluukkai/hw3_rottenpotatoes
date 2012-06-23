@@ -20,9 +20,23 @@
     - @movie.reviews.each do |review|
       %li
         = "#{review.potatoes} potatoes by #{review.user.name}"
+
+  %ul
+    %li
+      %b average #{average @movie.reviews} potatoes
+
 - else
   %h2
     no reviews
+
+- if @movie.comments.length>0
+  %h2 comments
+
+  %ul
+    - @movie.comments.each do |comment|
+      %li
+        %em= "#{comment.user.name}:"
+        "#{comment.comments}"
 
 = if @movie.description
   %h3 Description:
@@ -36,6 +50,10 @@
     %label How many potatoes:
     = select_tag 'review[potatoes]', options_for_select(1..5)
     = submit_tag 'Create Review'
+- if current_user
+  = form_tag movie_comments_path(@movie) do
+    = text_field_tag 'comments'
+    = submit_tag 'Give comment'
 - if is_admin
   = button_to 'Delete', movie_path(@movie), :method => :delete, :confirm => 'Are you sure?'
   %br

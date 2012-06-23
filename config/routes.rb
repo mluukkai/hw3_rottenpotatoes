@@ -3,6 +3,7 @@ Rottenpotatoes::Application.routes.draw do
   #resources :movies
   resources :movies do
     resources :reviews
+    resources :comments
   end
 
   # map '/' to be a redirect to '/movies'
