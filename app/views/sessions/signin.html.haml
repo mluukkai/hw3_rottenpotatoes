@@ -1,0 +1,13 @@
+-# add to end of app/views/movies/index.html.haml:
+
+%h1 Give your credentials to sign in
+
+= form_tag :action => 'signin_post' do
+
+  %label{:for => 'name'} Name
+  = text_field_tag 'name'
+  %label{:for => 'password'} Password
+  = password_field_tag 'password'
+  = submit_tag 'Signin'
+
+= link_to 'Back to movie list', movies_path

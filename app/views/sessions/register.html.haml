@@ -1,0 +1,13 @@
+%h1 Create a new acoount
+
+= form_tag :action => 'register_post' do
+
+  %label{:for => 'name'} Name
+  = text_field_tag 'name'
+  %label{:for => 'password'} Password
+  = password_field_tag 'password'
+  %label{:for => 'password'} Password confirmation
+  = password_field_tag 'password_conf'
+  = submit_tag 'Create new user'
+
+= link_to 'Back to movie list', movies_path

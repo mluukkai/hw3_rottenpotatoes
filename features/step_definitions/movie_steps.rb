@@ -2,27 +2,91 @@
 
 Given /the following movies exist/ do |movies_table|
   movies_table.hashes.each do |movie|
-    # each returned element will be a hash whose key is the table header.
-    # you should arrange to add that movie to the database here.
+    Movie.create!(movie)
   end
-  flunk "Unimplemented"
 end
-
-# Make sure that one string (regexp) occurs before or after another one
-#   on the same page
 
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
-  #  ensure that that e1 occurs before e2.
-  #  page.content  is the entire content of the page as a string.
-  flunk "Unimplemented"
+  regexp = /#{e1}.*#{e2}/m
+  page.body.should =~ regexp
 end
 
-# Make it easier to express checking or unchecking several boxes at once
-#  "When I uncheck the following ratings: PG, G, R"
-#  "When I check the following ratings: G"
 
 When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
-  # HINT: use String#split to split up the rating_list, then
-  #   iterate over the ratings and reuse the "When I check..." or
-  #   "When I uncheck..." steps in lines 89-95 of web_steps.rb
+  rating_list.split(",").each{ |r|
+    step "I #{uncheck}check \"ratings[#{r.strip}]\""
+  }
 end
+
+Then /^I should (not )?see all of the movies:$/ do |nt, table|
+  table.hashes.each{ |m|
+    step "I should #{nt }see \"#{m[:title]}\""
+  }
+end
+
+Then /^I should see movies in following order:$/ do |table|
+  r = ""
+  table.hashes.each do |movie|
+    r += movie[:title] + ".*"
+  end
+  regexp = /#{r}/m
+  page.body.should =~ regexp
+end
+
+Then /^the director of "([^"]*)" should be "([^"]*)"$/ do |arg1, arg2|
+  Movie.find_by_title(arg1).director.should == arg2
+end
+
+Then /^I should see "([^"]*)" has no director info$/ do |movie|
+  Movie.all_ratings.each { |r|
+    step "I check \"ratings[#{r}]\""
+  }
+  step 'I press "ratings_submit"'
+
+  page.body.split("<tr>").each { |row|
+    name_author = movie_name_and_author(row)
+    if name_author
+      name_author[1].blank?.should == true if name_author[0] == movie
+    end
+  }
+
+end
+
+def movie_name_and_author(row)
+  regex = /^<td>(.*)<\/td>.*$/
+
+  parts = row.split("\n")
+
+  parts[1] =~ regex
+  movie = $1
+  return nil if not movie
+
+  parts[4] =~ regex
+  director = $1
+  return nil if not director
+
+  return [movie, director]
+end
+
+When /^info$/ do
+  puts "*********************"
+  Movie.all.each { |m|
+    puts m.inspect
+  }
+  m = Movie.find(7)
+  puts m.director == nil
+  puts "*********************"
+end
+
+
+#Then /^I should see all of the movies:$/ do |table|
+#  table.hashes.each{ |m|
+#    step "I should see \"#{m[:title]}\""
+#  }
+#end
+#
+#Then /^I should not see all of the movies:$/ do |table|
+#  table.hashes.each{ |m|
+#    step "I should not see \"#{m[:title]}\""
+#  }
+#end

@@ -7,13 +7,40 @@
     Rating:
     = @movie.rating
   %li
+    Director:
+    = @movie.director
+  %li
     Released on:
     = @movie.release_date.strftime("%B %d, %Y")
 
-%h3 Description:
+- if @movie.reviews.length>0
+  %h2 reviews
 
-%p#description= @movie.description
+  %ul
+    - @movie.reviews.each do |review|
+      %li
+        = "#{review.potatoes} potatoes by #{review.user.name}"
+- else
+  %h2
+    no reviews
 
-= link_to 'Edit', edit_movie_path(@movie)
-= button_to 'Delete', movie_path(@movie), :method => :delete, :confirm => 'Are you sure?'
+= if @movie.description
+  %h3 Description:
+
+  %p#description= @movie.description
+
+%h3 Actions:
+
+- if current_user and not has_rated @movie
+  = form_tag :action => 'rate' do
+    = select 'rating','value', ['1','2','3','4','5']
+    = submit_tag 'Give review'
+    = hidden_field_tag 'movie', @movie.id
+- if is_admin
+  = button_to 'Delete', movie_path(@movie), :method => :delete, :confirm => 'Are you sure?'
+  %br
+  = link_to 'Edit', edit_movie_path(@movie)
+%br
+= link_to 'Find Movies With Same Director', withsamedirector_path(@movie)
+%br
 = link_to 'Back to movie list', movies_path

@@ -1,0 +1,33 @@
+milk_movie:
+  id: 1
+  title: Milk
+  rating: R
+  director: Gandhi
+  release_date: 2008-11-26
+
+documentary_movie:
+  id: 2
+  title: Food, Inc.
+  rating: G
+  director: Gandhi
+  release_date: 2008-09-07
+
+angry_movie:
+  id: 3
+  title: Drink, Inc.
+  rating: G
+  director: Stalin
+  release_date: 2008-09-07
+
+bad_movie:
+  id: 4
+  title: Shit
+  rating: G
+  director: ""
+  release_date: 2008-09-07
+
+worse_movie:
+  id: 5
+  title: Sheisse
+  rating: G
+  release_date: 2008-09-07
