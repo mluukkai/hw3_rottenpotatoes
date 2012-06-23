@@ -67,26 +67,26 @@ class MoviesController < ApplicationController
     redirect_to movies_path
   end
 
-  def rate
-    #debugger
-    puts params.inspect
-    value = params[:rating][:value]
-    review = Review.new(:potatoes => value)
-    movie = Movie.find(params[:movie])
-    user = current_user
-
-
-    if user and movie
-      movie.reviews << review
-      user.reviews << review
-      movie.save!
-      user.save!
-      flash[:notice] = "review #{value} given"
-    else
-      flash[:error] = "review not given"
-    end
-
-    redirect_to movie_path(params[:movie])
-  end
+  #def rate
+  #  #debugger
+  #  puts params.inspect
+  #  value = params[:rating][:value]
+  #  review = Review.new(:potatoes => value)
+  #  movie = Movie.find(params[:movie])
+  #  user = current_user
+  #
+  #
+  #  if user and movie
+  #    movie.reviews << review
+  #    user.reviews << review
+  #    movie.save!
+  #    user.save!
+  #    flash[:notice] = "review #{value} given"
+  #  else
+  #    flash[:error] = "review not given"
+  #  end
+  #
+  #  redirect_to movie_path(params[:movie])
+  #end
 
 end

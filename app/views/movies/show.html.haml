@@ -32,10 +32,10 @@
 %h3 Actions:
 
 - if current_user and not has_rated @movie
-  = form_tag :action => 'rate' do
-    = select 'rating','value', ['1','2','3','4','5']
-    = submit_tag 'Give review'
-    = hidden_field_tag 'movie', @movie.id
+  = form_tag movie_reviews_path(@movie) do
+    %label How many potatoes:
+    = select_tag 'review[potatoes]', options_for_select(1..5)
+    = submit_tag 'Create Review'
 - if is_admin
   = button_to 'Delete', movie_path(@movie), :method => :delete, :confirm => 'Are you sure?'
   %br
