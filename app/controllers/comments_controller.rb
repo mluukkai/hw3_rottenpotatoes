@@ -5,14 +5,14 @@ class CommentsController < ApplicationController
     movie = Movie.find(params[:movie_id])
     user = current_user
 
-    if user and movie
+    if user and movie and not value.empty?
       movie.comments << comment
       user.comments << comment
       movie.save!
       user.save!
       flash[:notice] = "comment given"
     else
-      flash[:error] = "comment not given"
+      flash[:notice] = "comment not given"
     end
 
     redirect_to movie_path(params[:movie_id])
